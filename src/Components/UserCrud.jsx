@@ -6,6 +6,7 @@ import { IoMdEye } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { FaUserCog } from "react-icons/fa";
 import { UserContext } from './UserContext';
+import { toast, ToastContainer } from 'react-toastify';
 
 const UserCrud = () => {
   const { users, setUsers } = useContext(UserContext);
@@ -14,7 +15,7 @@ const UserCrud = () => {
   const [editingUser, setEditingUser] = useState(null);
   const navigate = useNavigate();
 
-  
+  const [errorMessage, setErrorMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -45,17 +46,58 @@ const UserCrud = () => {
   };
 
   const handleSaveUser = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // expression for email
     if (editingUser) {
       const updatedUsers = users.map((user, index) =>
         index === editingUser.index ? { ...user, firstName: newUser.name, email: newUser.email }: user);
       setUsers(updatedUsers);
+      setErrorMessage("");
     } else {
+      if (newUser.name && newUser.email) {
       const newUserData = {
         firstName: newUser.name,
         email: newUser.email,
       };
       setUsers([...users, newUserData]);
+      setErrorMessage("");
     }
+    else  {
+      if (!newUser.name.trim() && !newUser.name.trim()) {
+        toast.error("Please enter the details", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+    if (!newUser.name.trim()) {
+      toast.error("Please enter a valid name.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+
+    if (!emailRegex.test(newUser.email)) {
+      toast.error("Please enter a valid email address.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+  }
+}
     setShowModal(false);
   };
 
@@ -64,7 +106,9 @@ const UserCrud = () => {
   };
 
   return (
+    
     <div className="user-crud-container">
+      <ToastContainer/>
       <div className="user-crud-header">
         <h2>
           <FaUserCog className="usermanagement-icon" /> User Management
@@ -149,15 +193,21 @@ const UserCrud = () => {
                 }
               />
             </Form.Group>
+            {errorMessage && (
+             <div className="error-message">
+                   {errorMessage}
+             </div>
+             )}
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <button className="adduserbtn" onClick={handleSaveUser}>
             {editingUser ? 'Save Changes' : 'Add User'}
-          </button>
-        </Modal.Footer>
+          </button>     
+       </Modal.Footer>
       </Modal>
     </div>
+  
   );
 };
 

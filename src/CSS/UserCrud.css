@@ -100,7 +100,12 @@
     border-color: #102944;
     color: white;
   }
-  
+  .error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    text-align: center;
+  }
   .plusicon{
     margin-right: 5px;
   }
