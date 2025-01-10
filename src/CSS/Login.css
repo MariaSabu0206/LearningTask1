@@ -1,0 +1,30 @@
+.logincontainer{
+   width: 60%;
+    padding-top: 100px;
+    padding-bottom: 70px;
+    margin-left: 0px;
+}
+.efield, .pfield , .btn{
+    margin-left: 320px;
+    width: 50%;
+    
+}
+.title{
+    color: rgb(185, 61, 53);
+    margin-left: 155px;
+}
+.alert{
+    margin-top: 10px;
+    margin-left: 320px;
+    width: 50%;
+}
+.loginlabel{
+    font-weight: bold ;
+}
+.loginbutton{
+    background-color: rgb(203, 88, 88) !important;
+    border-color: rgb(203, 88, 88) !important;
+    height: 60px;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+}

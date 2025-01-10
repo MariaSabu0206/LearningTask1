@@ -1,0 +1,301 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -350px; 
+    width: 264px;
+    height: 100%;
+    background-color: #343a40;
+    transition: left 0.3s ease-in-out; 
+    padding-top: 20px;
+    z-index: 1000;
+  }
+  
+  .sidebar.show {
+    left: 0; 
+    margin-left: 0px;
+
+    .brand{
+        margin-left: 29px;
+    }
+    .brandicon{
+        font-size: 28px;
+        cursor:pointer;
+        color: white;
+        margin-right: 4px;
+        margin-top: 2px;
+    }
+    .brandname{
+        font-size: 26px;
+        cursor: pointer;
+        color: white;
+    }
+    .hamburger{
+        color: white !important;
+        margin-bottom: 4px;
+        margin-left: 60px;
+    }
+}
+    
+  .sidebar nav .nav-link {
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 15px;
+    text-decoration: none;
+    display: block;  
+  }
+  
+  .sidebar nav .nav-link:hover {
+    background-color: #bbb5b5;
+    color: black;
+    margin-left: -20px;
+    width: 264px;
+    }
+ 
+.close-btn {
+    position: absolute;
+    top: 26px;
+    right: 20px;
+    font-size: 30px;
+    color: white;
+    background: transparent;
+    border-radius: 8px;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    margin-right: -16px;
+    margin-top: -26px;
+    
+  }
+  
+  .close-btn:hover {
+    color: #ccc;
+    background-color: black;
+  }
+
+  .nav{
+    margin-top: 43px;
+    margin-left: 20px;
+  }
+ .nav-icon{
+    margin-right:15px ;
+ }
+
+.navbar {
+    position: sticky !important;  
+    top: 0 !important; 
+    z-index: 100 !important;  
+    width: 100% !important;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  
+}
+
+
+.brand{
+    margin-left: 10px;
+}
+.brandicon{
+    font-size: 28px;
+    cursor:pointer;
+    color: rgb(24, 85, 101);
+    margin-right: 4px;
+    margin-top: 2px;
+}
+.brandname{
+    font-size: 26px;
+    cursor: pointer;
+    color: rgb(24, 85, 101);
+}
+.hamburger{
+    color: black !important;
+    margin-bottom: 4px;
+}
+.home-icon{
+    font-size: 23px;
+    margin-right:15px ;
+}
+.home-icon:hover{
+   color:rgb(24, 85, 101) ;
+}
+
+
+.profile-dropdown-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-img {
+    border-radius: 50%;
+    background-color: transparent;  
+    border: none; 
+    padding: 0;  
+    display: inline-block;
+    height: 40px; 
+    width: 40px;  
+    cursor: pointer;
+  }
+  
+  .profile-img:hover {
+    transform: scale(1.1);  
+  }
+  
+  
+  .profile-dropdown {
+    position: absolute;
+    top: 35px; 
+    right: 0;
+    width: 258px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+  }
+  
+  .profile-dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  .item1{
+    font-style: italic;
+    font-weight: 500;
+  }
+ 
+  
+  .profile-dropdown-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .profile-dropdown-item:active {
+    background-color: #e9ecef;
+  }
+  
+  .profile-dropdown-item:last-child {
+    border-top: 1px solid #ddd;
+    color: #dc3545;
+    font-weight: bold;
+  }
+
+
+.listcontainer1{
+margin-top: 50px;
+}
+.listcontainer1 li{
+   list-style-type: none;
+   margin-bottom: 15px;
+   margin-top: 15px;
+}
+.listcontainer2{
+    margin-top: 80px;
+}
+.listcontainer2 li{
+    list-style-type: none;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.icon{
+    margin-left: 40px;
+    margin-right: 15px;
+}
+.logout{
+    margin-top: 250px !important;
+}
+ul li a {
+    text-decoration: none; 
+    color: white;
+  }
+  .search{
+    margin-right: 150px;
+  }
+  .search-icon{
+    font-size: 20px;
+    margin-left: 8px;
+    margin-top: 8px;
+  }
+  .notify{
+    color: rgb(88, 88, 228);
+    font-size: 25px;
+    margin-right: 20px;
+    margin-top: 4px;
+  }
+  .logouticon{
+    text-decoration: none; 
+    color: black;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    
+  }
+  .logoutname{
+    font-weight: 700;
+    text-decoration: none; 
+    color: black;
+    margin-right: 20px;
+  }
+  .logoutcontainer{
+    margin-top: 4px;
+    font-size: 18px;
+  }
+  .logouticonsmall{
+    display: none;
+  }
+ .notify:hover{
+   color: rgb(235, 20, 20);
+  }
+  .logoutcontainer:hover {
+    .logoutname , .logouticon{
+      color: rgb(12, 12, 50)!important; 
+     
+    }
+    
+  }
+  
+  @media (max-width: 575.98px) {
+    .logoutname{
+        display: none;
+    }
+    .logouticonsmall{
+        display:inline;
+        font-weight: 600;
+        margin-right: 20px;
+      }
+      .notify{
+        font-size: 20px;
+        margin-top: 8px;
+      }
+      .search{
+        margin-right: 20px;
+        width: 150px;
+      }
+  }
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    .logoutname{
+        display: none;
+    }
+    .logouticonsmall{
+        display:inline;
+        font-weight: 600;
+        margin-right: 20px;
+      }
+      .notify{
+        font-size: 22px;
+        margin-top: 8px;
+        margin-right: 12px;
+      }
+      .search{
+        margin-right: 20px;
+        width: 150px;
+      }
+      .notify:hover{
+        color: red;
+      }
+      .logouticonsmall:hover{
+        color: black;
+      }
+  }
+  /* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .search{
+        margin-right: 20px;
+    }
+
+  }

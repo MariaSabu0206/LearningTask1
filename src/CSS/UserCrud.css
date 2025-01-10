@@ -1,0 +1,129 @@
+.user-crud-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .user-crud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .user-crud-header h2 {
+    font-size: 30px;
+    color: rgb(27, 27, 95);
+  }
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: -120px !important;
+    width: 100vw; 
+    height: 100vh; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1040; 
+  }
+  .modal-content{
+    margin: 28px;
+  }
+
+
+  .usermanagement-icon{
+    margin-bottom: 7px;
+    color: rgb(27, 27, 95);
+  }
+  
+  .user-crud-header button {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-table th,
+  .user-table td {
+    text-align: center;
+  }
+  
+  .user-table th {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .user-table td button {
+    margin-right: 5px;
+  }
+  .actionscol{
+    width: 200px;
+  }
+  .boxdiv{
+    justify-content: center;
+  }
+  .editbtn{
+    color: #1a3c60;
+    font-size: 18px ;
+  }
+ 
+  .editbox:hover{
+    background-color: #0f2134;
+    .editbtn{
+        color: #edf0f4; 
+      }
+   }
+
+  .deletebtn{
+    color: rgb(235, 88, 88);
+    font-size: 18px ;
+  }
+  .deletebox:hover{
+    background-color: #c94e3d;
+    .deletebtn{
+        color: #edf0f4; 
+      }
+   }
+  .eyebtn{
+    color: #0b6acf;
+    font-size: 18px ;
+  }
+  .overviewbox:hover{
+    background-color: #4486cc;
+    .eyebtn{
+        color: #edf0f4; 
+      }
+   }
+  button {
+    
+    padding: 5px 10px;
+    margin-top: 10px;
+  }
+  .adduserbtn{
+    border-radius: 8px;
+    background-color: #15365a;
+    border-color: #102944;
+    color: white;
+  }
+  
+  .plusicon{
+    margin-right: 5px;
+  }
+  
+  .editbox , .deletebox , .overviewbox{
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 4px;
+    margin-right: 5px;
+   
+  }
+  button:focus {
+    outline: none;
+  }
+  
+  button:hover {
+    background-color: #0f2134;
+    color: white;
+  }
+  
+  button:active {
+    transform: scale(0.98);
+  }
+  

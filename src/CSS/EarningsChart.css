@@ -1,0 +1,21 @@
+.earnings-container{
+    width: 500px;
+    margin-left: 6px;
+    margin-top: 25px;
+}
+.earnings-container canvas {
+    height: 390px !important;  
+    width: 450px;
+    
+   
+  }
+.earningdiv{
+    margin-bottom: 35px;
+    height: 49px;
+    width: 500px;
+    background-color: rgb(245, 235, 235);
+  }
+  .earningdiv h3{
+    padding-top: 5px;
+    text-align: center;
+  }
