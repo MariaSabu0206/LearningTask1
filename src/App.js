@@ -5,6 +5,7 @@ import Login from './Components/Login';
 import { UserContext, UserProvider } from './Components/UserContext';
 import ProtectedRoutes from './Components/ProtectedRoutes';
 import { useContext, useState } from 'react';
+import ToastProvider from './Components/ToastProvider';
 
 const AppContent = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -40,7 +41,9 @@ const AppContent = () => {
                 <Login />
               )
             } />
-          <Route path="/*" element={<ProtectedRoutes />} />
+            
+               <Route path="/*" element={<ToastProvider><ProtectedRoutes /></ToastProvider>} />
+          
         </Routes>
       </div>
     </>
@@ -51,9 +54,13 @@ function App() {
   return (
     
     <UserProvider>
-      <Router>
+     
+        <Router>
+        
            <AppContent />
-      </Router>
+      
+        </Router>
+      
     </UserProvider>
   );
 }

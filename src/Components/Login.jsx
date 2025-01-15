@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../CSS/Login.css';
@@ -67,9 +66,9 @@ const Login = () => {
             />
           </Form.Group>
 
-          <Button className="loginbutton" type="submit">
+          <button className="loginbutton" type="submit">
             Login
-          </Button>
+          </button>
           {error && <div className="alert alert-danger">{error}</div>}
         </Form>
       </div>

@@ -7,7 +7,6 @@ import Reports from './Reports';
 import Growth from './Growth'
 import NotFound from './NotFound';
 import { UserContext } from './UserContext';
-import ToastProvider from './ToastProvider';
 
 const ProtectedRoutes = () => {
   
@@ -19,7 +18,7 @@ const ProtectedRoutes = () => {
   
 
   return (
-    <ToastProvider>
+    
     <Routes>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/users" element={<UserCrud />} />
@@ -28,7 +27,7 @@ const ProtectedRoutes = () => {
       <Route path="/growth" element={<Growth/>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
-    </ToastProvider>
+    
   );
 };
 

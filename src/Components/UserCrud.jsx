@@ -14,7 +14,7 @@ const UserCrud = () => {
   const [newUser, setNewUser] = useState({ name: '', email: '' });
   const [editingUser, setEditingUser] = useState(null);
   const navigate = useNavigate();
-
+  
   const [errorMessage, setErrorMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;

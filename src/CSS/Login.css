@@ -24,7 +24,10 @@
 .loginbutton{
     background-color: rgb(203, 88, 88) !important;
     border-color: rgb(203, 88, 88) !important;
+    border-radius: 8px;
     height: 60px;
+    width: 370px;
+    margin: 6px 320px;
     font-size: 20px !important;
     font-weight: 700 !important;
 }
