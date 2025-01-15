@@ -2,9 +2,9 @@ import React, { useState, useContext } from 'react';
 import { Form, Table, Modal, Pagination } from 'react-bootstrap';
 import { FaPlus, FaTrash, FaEdit } from 'react-icons/fa';
 import '../CSS/UserCrud.css';
-import { IoMdEye } from "react-icons/io";
+import { IoMdEye } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
-import { FaUserCog } from "react-icons/fa";
+import { FaUserCog } from 'react-icons/fa';
 import { UserContext } from './UserContext';
 import { toast } from 'react-toastify';
 
@@ -14,12 +14,10 @@ const UserCrud = () => {
   const [newUser, setNewUser] = useState({ name: '', email: '' });
   const [editingUser, setEditingUser] = useState(null);
   const navigate = useNavigate();
-  
-  const [errorMessage, setErrorMessage] = useState("");
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  
   const indexOfLastUser = currentPage * itemsPerPage;
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -34,7 +32,7 @@ const UserCrud = () => {
   };
 
   const handleEditUser = (user) => {
-    setEditingUser(user);
+    setEditingUser(user); // Store user with global index
     setNewUser({ name: user.firstName, email: user.email });
     setShowModal(true);
   };
@@ -44,68 +42,45 @@ const UserCrud = () => {
   };
 
   const handleSaveUser = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // expression for email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (editingUser) {
-      const updatedUsers = users.map((user, index) =>
-        index === editingUser.index ? { ...user, firstName: newUser.name, email: newUser.email }: user);
+      const updatedUsers = users.map((user, idx) =>
+        idx === editingUser.index
+          ? { ...user, firstName: newUser.name, email: newUser.email }
+          : user
+      );
       setUsers(updatedUsers);
-      setErrorMessage("");
-      toast.success("User details edited successfully.", {
-        position: "top-right",
+      toast.success('User details edited successfully.', {
+        position: 'top-right',
         autoClose: 3000,
-        hideProgressBar: false,
       });
     } else {
-      if (newUser.name && newUser.email) {
-      const newUserData = {
-        firstName: newUser.name,
-        email: newUser.email,
-      };
-      setUsers([...users, newUserData]);
-      setErrorMessage("");
-      toast.success("New user added successfully.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-      });
-    }
-    else  {
-      if (!newUser.name.trim() && !newUser.name.trim()) {
-        toast.error("Please enter the details", {
-          position: "top-right",
+      if (newUser.name.trim() && emailRegex.test(newUser.email)) {
+        const newUserData = {
+          firstName: newUser.name,
+          email: newUser.email,
+        };
+        setUsers([...users, newUserData]);
+        toast.success('New user added successfully.', {
+          position: 'top-right',
           autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
         });
+      } else {
+        if (!newUser.name.trim()) {
+          toast.error('Please enter a valid name.', {
+            position: 'top-right',
+            autoClose: 3000,
+          });
+        } else if (!emailRegex.test(newUser.email)) {
+          toast.error('Please enter a valid email address.', {
+            position: 'top-right',
+            autoClose: 3000,
+          });
+        }
         return;
       }
-    if (!newUser.name.trim()) {
-      toast.error("Please enter a valid name.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      return;
     }
-
-    if (!emailRegex.test(newUser.email)) {
-      toast.error("Please enter a valid email address.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      return;
-    }
-  }
-}
     setShowModal(false);
   };
 
@@ -117,10 +92,9 @@ const UserCrud = () => {
     const updatedUsers = users.filter((_, index) => index !== userToDelete);
     setUsers(updatedUsers);
     setShowConfirmModal(false);
-    toast.success("User removed successfully.", {
-      position: "top-right",
+    toast.success('User removed successfully.', {
+      position: 'top-right',
       autoClose: 3000,
-      hideProgressBar: false,
     });
   };
 
@@ -134,10 +108,7 @@ const UserCrud = () => {
     setUserToDelete(null);
   };
 
- 
-
   return (
-    
     <div className="user-crud-container">
       <div className="user-crud-header">
         <h2>
@@ -165,14 +136,27 @@ const UserCrud = () => {
               <td>{user.email}</td>
               <td className="actionrow">
                 <div className="d-flex boxdiv">
-                  <div className="editbox" onClick={() => handleEditUser({ ...user, index })}>
-                    <FaEdit className="editbtn"/>
-                  </div>   
-                  <div className="deletebox" onClick={() => confirmDelete(indexOfFirstUser + index)}>
+                  <div
+                    className="editbox"
+                    onClick={() =>
+                      handleEditUser({ ...user, index: indexOfFirstUser + index })
+                    }
+                  >
+                    <FaEdit className="editbtn" />
+                  </div>
+                  <div
+                    className="deletebox"
+                    onClick={() => confirmDelete(indexOfFirstUser + index)}
+                  >
                     <FaTrash className="deletebtn" />
-                  </div>    
-                  <div className="overviewbox" onClick={() => handleViewUser(indexOfFirstUser + index + 1)}>
-                    <IoMdEye className="eyebtn"/>
+                  </div>
+                  <div
+                    className="overviewbox"
+                    onClick={() =>
+                      handleViewUser(indexOfFirstUser + index + 1)
+                    }
+                  >
+                    <IoMdEye className="eyebtn" />
                   </div>
                 </div>
               </td>
@@ -186,23 +170,23 @@ const UserCrud = () => {
           <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete this user? This action cannot be undone.
+          Are you sure you want to delete this user? This action cannot be
+          undone.
         </Modal.Body>
         <Modal.Footer>
-          <button className=' cancel' variant="secondary" onClick={closeModal}>
+          <button className="cancel" onClick={closeModal}>
             Cancel
-          </button >
-          <button className=' delete' variant="danger" onClick={handleDeleteUser}>
+          </button>
+          <button className="delete" onClick={handleDeleteUser}>
             Delete
-          </button >
+          </button>
         </Modal.Footer>
       </Modal>
 
-      
       <Pagination className="justify-content-center">
         {Array.from(
-          { length: Math.ceil(users.length / itemsPerPage) },(_, i) => 
-           (
+          { length: Math.ceil(users.length / itemsPerPage) },
+          (_, i) => (
             <Pagination.Item
               key={i + 1}
               active={i + 1 === currentPage}
@@ -210,7 +194,7 @@ const UserCrud = () => {
             >
               {i + 1}
             </Pagination.Item>
-           )
+          )
         )}
       </Pagination>
 
@@ -226,7 +210,9 @@ const UserCrud = () => {
                 type="text"
                 placeholder="Enter name"
                 value={newUser.name}
-                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, name: e.target.value })
+                }
               />
             </Form.Group>
             <Form.Group controlId="userEmail">
@@ -240,21 +226,15 @@ const UserCrud = () => {
                 }
               />
             </Form.Group>
-            {errorMessage && (
-             <div className="error-message">
-                   {errorMessage}
-             </div>
-             )}
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <button className="adduserbtn" onClick={handleSaveUser}>
             {editingUser ? 'Save Changes' : 'Add User'}
-          </button>     
-       </Modal.Footer>
+          </button>
+        </Modal.Footer>
       </Modal>
     </div>
-  
   );
 };
 
