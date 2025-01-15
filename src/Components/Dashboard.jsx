@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
-import '../CSS/Home.css';
+import '../CSS/Dashboard.css';
 import { SlCalender } from "react-icons/sl";
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import EarningsAndExpensesChart from './EarningsAndExpensesChart';
 import { AiOutlineStop } from "react-icons/ai";
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { UserContext } from './UserContext';
+import { toast } from 'react-toastify';
 
 ChartJS.register(
   CategoryScale,
@@ -18,9 +19,26 @@ ChartJS.register(
   Legend
 );
 
-const Home = () => {
+const Dashboard = () => {
     const { users } = useContext(UserContext);
+    const location = useLocation();
 
+    React.useEffect(() => {
+      if (location.state?.message) {
+          
+          toast.success(location.state.message, 
+            {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+          }
+        );
+          window.history.replaceState({}, document.title);
+      }
+  }, [location.state]);
 
   const data = {
     labels: ['Project 1', 'Project 2', 'Project 3', 'Project 4', 'Project 5'],
@@ -42,7 +60,7 @@ const Home = () => {
           'rgba(75, 192, 192, 1)',
           'rgba(153, 102, 255, 1)'
         ],
-        borderWidth: 1,
+        borderWidth: 0.5,
       },
     ],
   };
@@ -88,7 +106,7 @@ const Home = () => {
             
             <Col className="mb-4">
               <Card className='custom-card'>
-                <Link to="/home/users" style={{textDecoration:"none",color:"white"}}><Card.Body>
+                <Link to="/users" style={{textDecoration:"none",color:"white"}}><Card.Body>
                   <Card.Title>Active Users</Card.Title>
                   <Card.Text>{users.length}</Card.Text>
                 </Card.Body></Link>
@@ -240,4 +258,4 @@ const Home = () => {
   );
 }
 
-export default Home;
+export default Dashboard;

@@ -35,7 +35,7 @@ const Header = ({ onSidebarToggle }) => {
 
   const logout = () => {
     localStorage.removeItem('userData');
-    navigate('/');
+    navigate('/login');
   };
 
   const toggleProfileDropdown = () => {
@@ -93,10 +93,10 @@ const Header = ({ onSidebarToggle }) => {
         </div>
         <nav>
           <Nav className="flex-column">
-            <NavLink to="/home" className="nav-link"><MdGridView className="nav-icon" /> Dashboard</NavLink>
-            <NavLink to="/home/growth" className="nav-link"><BsGraphUp className="nav-icon" /> Growth</NavLink>
-            <NavLink to="/home/users" className="nav-link"><MdOutlinePeopleAlt className="nav-icon" /> Users</NavLink>
-            <NavLink to="" className="nav-link"><HiOutlineDocumentReport className="nav-icon" /> Reports</NavLink>
+            <NavLink to="/dashboard" className="nav-link"><MdGridView className="nav-icon" /> Dashboard</NavLink>
+            <NavLink to="/growth" className="nav-link"><BsGraphUp className="nav-icon" /> Growth</NavLink>
+            <NavLink to="/users" className="nav-link"><MdOutlinePeopleAlt className="nav-icon" /> Users</NavLink>
+            <NavLink to="/reports" className="nav-link"><HiOutlineDocumentReport className="nav-icon" /> Reports</NavLink>
             <NavLink to="" className="nav-link"><IoMdText className="nav-icon" /> Support</NavLink>
             <NavLink to="" className="nav-link"><IoSettings className="nav-icon" /> Settings</NavLink>
           </Nav>

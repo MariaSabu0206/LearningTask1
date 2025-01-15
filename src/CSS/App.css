@@ -1,14 +1,10 @@
-
 html, body {
     overflow-x: hidden;
-  }
-
-
-  .sidebar.open {
-    transform: translateX(0); /* Shown when open */
-  }
+}
+.sidebar.open {
+    transform: translateX(0); 
+}
   
-  /* Header styles */
   .header {
     display: flex;
     justify-content: space-between;
@@ -26,7 +22,6 @@ html, body {
     border-radius: 5px;
   }
   
-  /* Main content styles */
   .main-content {
     margin-left: 0;
     padding: 20px;

@@ -100,6 +100,20 @@
     border-color: #102944;
     color: white;
   }
+
+  .cancel{
+    border-radius: 8px;
+    background-color: #3971ac;
+    border-color: #3971ac;
+    color: white;
+
+  }
+  .delete{
+    border-radius: 8px;
+    background-color: rgb(221, 61, 61);
+    border-color: rgb(221, 61, 61);
+    color: white;
+  }
   .error-message {
     color: red;
     font-size: 0.9rem;
@@ -123,7 +137,7 @@
     outline: none;
   }
   
-  button:hover {
+  .adduserbtn:hover {
     background-color: #0f2134;
     color: white;
   }

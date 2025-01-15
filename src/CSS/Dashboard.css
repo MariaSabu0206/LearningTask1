@@ -1,23 +1,21 @@
-
 .custom-card {
     background-color: rgb(24, 85, 101) !important; 
     color: white !important;
-    transition: transform 0.4s ease, box-shadow 0.3s ease;
-    
+    transition: transform 0.4s ease, box-shadow 0.3s ease;  
   }
- 
-  
-  .cardrow{
+.cardrow{
     margin-top: 85px !important;
   }
- 
-  .custom-card:hover {
+ .custom-card:hover {
     background-color: rgb(12, 59, 71) !important;
     transform: translateY(-10px) scale(1.05) rotateX(5deg) rotateY(5deg);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
-.show{
+.show{ 
     margin-left: 120px;
+}
+.eventeachrow{
+  width: 473px;
 }
 .eventrow{
     margin-top: 20px !important;
@@ -26,8 +24,7 @@
 .eventeachrow:hover, .pendingeachrow:hover{
     background-color: rgb(248, 240, 230);
     width: 470px;
-  
-}
+  }
 .eventeachrow:hover{
     .btn {
         background-color: rgb(12, 59, 71) !important;
@@ -49,68 +46,68 @@
         background-color: red !important ;
     }
 }
-  .eventcontainer{
+.eventcontainer{
     width: 690px; 
   }
- .chartcontainer{
+.chartcontainer{
     margin-left: 66px !important;
  }
   
-  .pendingcontainer{
+.pendingcontainer{
     margin-top: 30px;
     margin-left: 224px;
   }
-  .rule{
+.rule{
     width: 469px;
     margin-top: 0;
   }
-  .calicon{
+.calicon{
     margin-right: 25px;
     font-size: large;
   }
-  .stopicon{
+.stopicon{
     margin-right: 25px;
     font-size: large;
     color: red;
   }
-  .eventsdiv, .pendingdiv, .runningpjctsdiv{
+.eventsdiv, .pendingdiv, .runningpjctsdiv{
     margin-bottom: 35px;
     height: 47px;
     width: 472px;
     background-color: rgb(245, 235, 235);
   }
-  .eventsdiv h3, .pendingdiv h3, .runningpjctsdiv h3{
+.eventsdiv h3, .pendingdiv h3, .runningpjctsdiv h3{
     padding-top: 5px;
     text-align: center;
   }
- .eventbutton, .pendingbutton{
+.eventbutton, .pendingbutton{
     margin-left: -167px;
     width: 162px;
  }
- .btn{
+.btn{
     background-color: rgb(72, 189, 191) !important;
  }
- .btnsuccess, .btnfail, .btnprogress{
+.btnsuccess, .btnfail, .btnprogress{
     border-radius: 6px;
    
  }
 
- .btnsuccess{
+.btnsuccess{
     background-color: rgb(132, 249, 132);
     border-color:rgb(132, 249, 132) ;
     margin-left: 327px;
  }
- .btnfail{
+.btnfail{
     background-color: rgb(244, 102, 102);
     border-color: rgb(244, 102, 102);
     margin-left: 335px;
  }
- .btnprogress{
+.btnprogress{
     background-color: rgb(249, 249, 96);
     border-color:rgb(249, 249, 96) ;
     margin-left: 299px;
  }
-.chart-wrapper{
+ .chart-wrapper{
     width: 80%;  
     height: 365px; 
     max-width: 1000px;
@@ -118,14 +115,14 @@
 .chart-wrapper canvas {
     height: 100% !important;  
     width: 475px !important;
-   
+   margin-left: -40px !important;
 }
 .modal{
     margin-left: -31px;
  }
   
 
-  .row2{
+.row2{
     margin-top: 68px;
     margin-bottom: 50px;
   }

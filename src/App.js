@@ -1,33 +1,29 @@
 import './CSS/App.css';
-import Growth from './Components/Growth';
-import Home from './Components/Home';
-import Login from './Components/Login';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import UserCrud from './Components/UserCrud';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Header from './Components/Header';
-import { useState } from 'react';
-import UserDetail from './Components/UserDetail';
-import { UserProvider } from './Components/UserContext';
+import Login from './Components/Login';
+import { UserContext, UserProvider } from './Components/UserContext';
+import ProtectedRoutes from './Components/ProtectedRoutes';
+import { useContext, useState } from 'react';
 
 const AppContent = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const isAuthenticated = () => {
-    return localStorage.getItem('isAuthenticated') === 'true';
-  };
+  const { hasUserData } = useContext(UserContext);
 
   const handleSidebarToggle = (isOpen) => {
     setIsSidebarOpen(isOpen);
   };
+  
 
-  const location = useLocation(); 
-  const shouldShowHeader = location.pathname !== '/';
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
+  const isNotFoundPage = location.pathname !== '/login' && location.pathname !== '/dashboard' && location.pathname !== '/users' && location.pathname !== '/user/:userId' && location.pathname !== '/growth' && location.pathname !== '/reports'
+  const shouldShowHeader = !isLoginPage && !isNotFoundPage;
 
   return (
     <>
-      {isAuthenticated() && shouldShowHeader && (
-        <Header onSidebarToggle={handleSidebarToggle} />
-      )}
+      {shouldShowHeader && <Header onSidebarToggle={handleSidebarToggle} />}
 
       <div
         className="main-content"
@@ -37,11 +33,14 @@ const AppContent = () => {
         }}
       >
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={isAuthenticated() ? <Home /> : <Navigate to="/" />} />
-          <Route path="/home/growth" element={isAuthenticated() ? <Growth /> : <Navigate to="/" />} />
-          <Route path="/home/users" element={isAuthenticated() ? <UserCrud /> : <Navigate to="/" />} />
-          <Route path="/user/:userId" element={isAuthenticated() ? <UserDetail /> : <Navigate to="/" />} />
+          <Route path="/login" element={
+              hasUserData() ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <Login />
+              )
+            } />
+          <Route path="/*" element={<ProtectedRoutes />} />
         </Routes>
       </div>
     </>
@@ -50,9 +49,10 @@ const AppContent = () => {
 
 function App() {
   return (
+    
     <UserProvider>
       <Router>
-        <AppContent />
+           <AppContent />
       </Router>
     </UserProvider>
   );

@@ -6,7 +6,7 @@ import { IoMdEye } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { FaUserCog } from "react-icons/fa";
 import { UserContext } from './UserContext';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const UserCrud = () => {
   const { users, setUsers } = useContext(UserContext);
@@ -24,6 +24,9 @@ const UserCrud = () => {
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
   const handleAddUser = () => {
     setShowModal(true);
     setEditingUser(null);
@@ -34,11 +37,6 @@ const UserCrud = () => {
     setEditingUser(user);
     setNewUser({ name: user.firstName, email: user.email });
     setShowModal(true);
-  };
-
-  const handleDeleteUser = (index) => {
-    const updatedUsers = users.filter((_, i) => i !== index);
-    setUsers(updatedUsers);
   };
 
   const handleViewUser = (userId) => {
@@ -52,6 +50,11 @@ const UserCrud = () => {
         index === editingUser.index ? { ...user, firstName: newUser.name, email: newUser.email }: user);
       setUsers(updatedUsers);
       setErrorMessage("");
+      toast.success("User details edited successfully.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+      });
     } else {
       if (newUser.name && newUser.email) {
       const newUserData = {
@@ -60,6 +63,11 @@ const UserCrud = () => {
       };
       setUsers([...users, newUserData]);
       setErrorMessage("");
+      toast.success("New user added successfully.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+      });
     }
     else  {
       if (!newUser.name.trim() && !newUser.name.trim()) {
@@ -105,10 +113,32 @@ const UserCrud = () => {
     setCurrentPage(pageNumber);
   };
 
+  const handleDeleteUser = () => {
+    const updatedUsers = users.filter((_, index) => index !== userToDelete);
+    setUsers(updatedUsers);
+    setShowConfirmModal(false);
+    toast.success("User removed successfully.", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+    });
+  };
+
+  const confirmDelete = (index) => {
+    setUserToDelete(index);
+    setShowConfirmModal(true);
+  };
+
+  const closeModal = () => {
+    setShowConfirmModal(false);
+    setUserToDelete(null);
+  };
+
+ 
+
   return (
     
     <div className="user-crud-container">
-      <ToastContainer/>
       <div className="user-crud-header">
         <h2>
           <FaUserCog className="usermanagement-icon" /> User Management
@@ -138,7 +168,7 @@ const UserCrud = () => {
                   <div className="editbox" onClick={() => handleEditUser({ ...user, index })}>
                     <FaEdit className="editbtn"/>
                   </div>   
-                  <div className="deletebox" onClick={() => handleDeleteUser(indexOfFirstUser + index)}>
+                  <div className="deletebox" onClick={() => confirmDelete(indexOfFirstUser + index)}>
                     <FaTrash className="deletebtn" />
                   </div>    
                   <div className="overviewbox" onClick={() => handleViewUser(indexOfFirstUser + index + 1)}>
@@ -150,6 +180,23 @@ const UserCrud = () => {
           ))}
         </tbody>
       </Table>
+
+      <Modal show={showConfirmModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this user? This action cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <button className=' cancel' variant="secondary" onClick={closeModal}>
+            Cancel
+          </button >
+          <button className=' delete' variant="danger" onClick={handleDeleteUser}>
+            Delete
+          </button >
+        </Modal.Footer>
+      </Modal>
 
       
       <Pagination className="justify-content-center">
