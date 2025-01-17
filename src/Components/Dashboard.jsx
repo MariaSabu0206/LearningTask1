@@ -6,7 +6,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import EarningsAndExpensesChart from './EarningsAndExpensesChart';
 import { AiOutlineStop } from "react-icons/ai";
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { toast } from 'react-toastify';
 
@@ -99,7 +99,6 @@ const Dashboard = () => {
 
   return (
     <>
-      
       <div className="homecontainer"  >
         <div className="container mt-4">
           <Row className='cardrow'>
@@ -253,7 +252,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <Outlet />
+      
     </>
   );
 }

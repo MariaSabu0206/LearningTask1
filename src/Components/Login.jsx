@@ -5,7 +5,7 @@ import axiosInstance from './AxiosInstance';
 import '../CSS/Login.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -15,25 +15,26 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await axiosInstance.post('/user/login', {
-        username,
+      const response = await axiosInstance.post('/auth/login', {
+        email,
         password,
-        expiresInMins: 30,
+        // expiresInMins: 30,
       });
 
       const data = response.data;
-      console.log(data);
+      localStorage.setItem('email', email);
+      console.log(data , "data");
+      console.log(response , "response");
+      
 
-      if (response.status === 200 && data) {
+      if (response.status === 201 && data) {
         console.log('Login successful');
-        localStorage.setItem('userData',JSON.stringify(data));
-        localStorage.setItem('authToken', data.token);
-        
+        localStorage.setItem('Token', data.access_token);
         navigate('/dashboard', { state: { message: 'User logged in successfully!' } });
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        setError('Invalid username or password');
+        setError('Invalid email or password');
       } else {
         setError('Something went wrong. Please try again later.');
       }
@@ -44,19 +45,21 @@ const Login = () => {
   return (
     <div className="logincontainer">
       <h1 className="title text-center mb-4">Login Form</h1>
-      <Form onSubmit={handleSubmit}>
+      <Form className='form' onSubmit={handleSubmit}>
         <Form.Group className="efield mb-3" controlId="formGroupEmail">
-          <Form.Label className="loginlabel">UserName</Form.Label>
-          <Form.Control
+          <Form.Label className="loginlabel">Email</Form.Label>
+          <Form.Control 
+            className='inputfield'
             type="text"
-            placeholder="Your Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
         <Form.Group className="pfield mb-3" controlId="formGroupPassword">
           <Form.Label className="loginlabel">Password</Form.Label>
-          <Form.Control
+          <Form.Control 
+            className='inputfield'
             type="password"
             placeholder="Password"
             value={password}

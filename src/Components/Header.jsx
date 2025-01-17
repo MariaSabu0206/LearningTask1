@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/Header.css';
-import { Navbar, Form, Nav } from 'react-bootstrap';
+import { Navbar, Form, Nav, Modal } from 'react-bootstrap';
 import { LiaRProject } from "react-icons/lia";
 import { FaSearch } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
@@ -13,37 +13,66 @@ import { IoMdText } from "react-icons/io";
 import { IoSettings } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router-dom';
+import axiosInstance from './AxiosInstance';
 
 const Header = ({ onSidebarToggle }) => {
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
   const [userData, setUserData] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('userData'));
-    if (user) {
-      setUserData(user);
-    }
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosInstance.get('/auth/profile');
+        setUserData(response.data);
+        console.log("loginuser",response.data);   
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserData();
   }, []);
 
   const toggleSidebar = () => {
     const newSidebarState = !showSidebar;
     setShowSidebar(newSidebarState);
-    onSidebarToggle(newSidebarState); 
+    onSidebarToggle(newSidebarState);
   };
 
   const logout = () => {
-    localStorage.removeItem('userData');
+    localStorage.removeItem('Token');
     navigate('/login');
   };
 
   const toggleProfileDropdown = () => {
     setShowProfileDropdown(!showProfileDropdown);
   };
+  const closeModal = () => {
+    setShowConfirmModal(false); 
+  };
 
   return (
     <div className="header-container">
+      <Modal show={showConfirmModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Logout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to Logout ?
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="cancel" onClick={closeModal}>
+            Cancel
+          </button>
+          <button className="delete" onClick={logout}>
+           Logout
+          </button>
+        </Modal.Footer>
+      </Modal>
+
       <Navbar className="bg-body-tertiary navbar">
         <Form inline>
           <div className="brand d-flex">
@@ -74,8 +103,8 @@ const Header = ({ onSidebarToggle }) => {
               {showProfileDropdown && (
                 <div className="profile-dropdown">
                   <div className="profile-dropdown-item item1">{userData.email}</div>
-                  <div className="profile-dropdown-item item2" onClick={logout}>
-                    Logout
+                  <div className="profile-dropdown-item item2" onClick={() => setShowConfirmModal(true)}>
+                   Logout
                   </div>
                 </div>
               )}
@@ -97,8 +126,8 @@ const Header = ({ onSidebarToggle }) => {
             <NavLink to="/growth" className="nav-link"><BsGraphUp className="nav-icon" /> Growth</NavLink>
             <NavLink to="/users" className="nav-link"><MdOutlinePeopleAlt className="nav-icon" /> Users</NavLink>
             <NavLink to="/reports" className="nav-link"><HiOutlineDocumentReport className="nav-icon" /> Reports</NavLink>
-            <NavLink to="" className="nav-link"><IoMdText className="nav-icon" /> Support</NavLink>
-            <NavLink to="" className="nav-link"><IoSettings className="nav-icon" /> Settings</NavLink>
+            <NavLink to="/support" className="nav-link"><IoMdText className="nav-icon" /> Support</NavLink>
+            <NavLink to="/settings" className="nav-link"><IoSettings className="nav-icon" /> Settings</NavLink>
           </Nav>
         </nav>
       </div>

@@ -5,7 +5,7 @@ import analytics from '../assets/analytics.jpg'
 
 const Growth = () => {
     return (
-        <>  
+        <>
             <div>
                 <h4 className='graphhead pt-4'>This Year Growth</h4>
                 <img className='graphimg' src={bargraph} alt="" />

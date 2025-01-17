@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://dummyjson.com',
+    baseURL: 'https://api.escuelajs.co/api/v1',
     timeout: 5000,
 });
 
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('authToken'); 
+        const token = localStorage.getItem('Token'); 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`; 
         }
@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
     (error) => {
         if (error.response && error.response.status === 401) {
             console.error('Unauthorized! Redirecting to login...');
-            localStorage.removeItem('authToken'); 
+            localStorage.removeItem('Token'); 
             window.location.href = '/login';  
         }
         return Promise.reject(error);

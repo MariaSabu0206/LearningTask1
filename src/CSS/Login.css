@@ -1,13 +1,16 @@
 .logincontainer{
-   width: 60%;
+    width: 60%;
     padding-top: 100px;
     padding-bottom: 70px;
-    margin-left: 0px;
+    margin-left: 200px;
 }
 .efield, .pfield , .btn{
     margin-left: 320px;
-    width: 50%;
+    width: 50% 
     
+}
+.form{
+    margin-left: 50px;
 }
 .title{
     color: rgb(185, 61, 53);
@@ -16,17 +19,20 @@
 .alert{
     margin-top: 10px;
     margin-left: 320px;
-    width: 50%;
+    width: 350px ;
 }
 .loginlabel{
     font-weight: bold ;
+}
+.inputfield{
+    width: 350px !important;
 }
 .loginbutton{
     background-color: rgb(203, 88, 88) !important;
     border-color: rgb(203, 88, 88) !important;
     border-radius: 8px;
     height: 60px;
-    width: 370px;
+    width: 350px;
     margin: 6px 320px;
     font-size: 20px !important;
     font-weight: 700 !important;

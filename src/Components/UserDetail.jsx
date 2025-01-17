@@ -9,7 +9,6 @@ const UserDetail = () => {
   const { users } = useContext(UserContext); 
   const navigate = useNavigate();
 
-  
   const user = users.find((user) => user.id === parseInt(userId));
 
   if (!user) {
@@ -26,17 +25,16 @@ const UserDetail = () => {
       </div>
 
       <div className="user-info">
-        <img src={user.image || 'https://via.placeholder.com/150'} alt="User" className="user-image" />
+        <img 
+          src={user.avatar || 'https://via.placeholder.com/150'} 
+          alt="User" 
+          className="user-image" 
+        />
         <div className="user-details">
-          <p><strong>Full Name:</strong> {`${user.firstName} ${user.lastName}`}</p>
-          <p><strong>Username:</strong> {user.username}</p>
+          <p><strong>ID:</strong> {user.id}</p>
+          <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Phone:</strong> {user.phone}</p>
-          <p><strong>Gender:</strong> {user.gender}</p>
-          <p><strong>Age:</strong> {user.age}</p>
-          <p><strong>Address:</strong> {`${user.address.address}, ${user.address.city}, ${user.address.state} (${user.address.country})`}</p>
-          <p><strong>Company:</strong> {user.company.name}</p>
-          <p><strong>Job Title:</strong> {user.company.title}</p>
+          <p><strong>Role:</strong> {user.role}</p>
         </div>
       </div>
     </div>
