@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import '../CSS/Header.css';
 import { Navbar, Form, Nav, Modal } from 'react-bootstrap';
 import { LiaRProject } from "react-icons/lia";
@@ -13,28 +13,14 @@ import { IoMdText } from "react-icons/io";
 import { IoSettings } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router-dom';
-import axiosInstance from './AxiosInstance';
+import { UserContext } from './UserContext';
 
 const Header = ({ onSidebarToggle }) => {
-
+  const { user, logout , hasToken } = useContext(UserContext); // Get user and logout from UserContext
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
-  const [userData, setUserData] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axiosInstance.get('/auth/profile');
-        setUserData(response.data);
-        console.log("loginuser",response.data);   
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-    fetchUserData();
-  }, []);
 
   const toggleSidebar = () => {
     const newSidebarState = !showSidebar;
@@ -42,37 +28,38 @@ const Header = ({ onSidebarToggle }) => {
     onSidebarToggle(newSidebarState);
   };
 
-  const logout = () => {
-    localStorage.removeItem('Token');
-    navigate('/login');
+  const handleLogout = () => {
+    logout(); // Call the logout method from UserContext
+    navigate('/login', { replace: true });
   };
 
   const toggleProfileDropdown = () => {
     setShowProfileDropdown(!showProfileDropdown);
   };
+
   const closeModal = () => {
-    setShowConfirmModal(false); 
+    setShowConfirmModal(false);
   };
 
   return (
     <div className="header-container">
+      {/* Logout Confirmation Modal */}
       <Modal show={showConfirmModal} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Logout</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to Logout ?
-        </Modal.Body>
+        <Modal.Body>Are you sure you want to Logout?</Modal.Body>
         <Modal.Footer>
           <button className="cancel" onClick={closeModal}>
             Cancel
           </button>
-          <button className="delete" onClick={logout}>
-           Logout
+          <button className="delete" onClick={handleLogout}>
+            Logout
           </button>
         </Modal.Footer>
       </Modal>
 
+      {/* Navbar */}
       <Navbar className="bg-body-tertiary navbar">
         <Form inline>
           <div className="brand d-flex">
@@ -83,14 +70,17 @@ const Header = ({ onSidebarToggle }) => {
           </div>
         </Form>
         <div className="d-flex ms-auto">
+          {/* Search */}
           <div className="search d-flex">
             <Form.Control type="text" placeholder="Search" />
             <FaSearch className="search-icon" />
           </div>
+          {/* Notifications */}
           <div>
             <IoNotifications className="notify" />
           </div>
-          {userData && (
+          {/* Profile Dropdown */}
+          {hasToken && (
             <div className="profile-dropdown-container">
               <div
                 className="profile-img"
@@ -102,9 +92,12 @@ const Header = ({ onSidebarToggle }) => {
 
               {showProfileDropdown && (
                 <div className="profile-dropdown">
-                  <div className="profile-dropdown-item item1">{userData.email}</div>
-                  <div className="profile-dropdown-item item2" onClick={() => setShowConfirmModal(true)}>
-                   Logout
+                  <div className="profile-dropdown-item item1">{user?.email}</div>
+                  <div
+                    className="profile-dropdown-item item2"
+                    onClick={() => setShowConfirmModal(true)}
+                  >
+                    Logout
                   </div>
                 </div>
               )}
@@ -113,6 +106,7 @@ const Header = ({ onSidebarToggle }) => {
         </div>
       </Navbar>
 
+      {/* Sidebar */}
       <div className={`sidebar ${showSidebar ? 'show' : ''}`}>
         <div className="brand d-flex">
           <LiaRProject className="brandicon" />
@@ -122,12 +116,24 @@ const Header = ({ onSidebarToggle }) => {
         </div>
         <nav>
           <Nav className="flex-column">
-            <NavLink to="/dashboard" className="nav-link"><MdGridView className="nav-icon" /> Dashboard</NavLink>
-            <NavLink to="/growth" className="nav-link"><BsGraphUp className="nav-icon" /> Growth</NavLink>
-            <NavLink to="/users" className="nav-link"><MdOutlinePeopleAlt className="nav-icon" /> Users</NavLink>
-            <NavLink to="/reports" className="nav-link"><HiOutlineDocumentReport className="nav-icon" /> Reports</NavLink>
-            <NavLink to="/support" className="nav-link"><IoMdText className="nav-icon" /> Support</NavLink>
-            <NavLink to="/settings" className="nav-link"><IoSettings className="nav-icon" /> Settings</NavLink>
+            <NavLink to="/dashboard" className="nav-link">
+              <MdGridView className="nav-icon" /> Dashboard
+            </NavLink>
+            <NavLink to="/growth" className="nav-link">
+              <BsGraphUp className="nav-icon" /> Growth
+            </NavLink>
+            <NavLink to="/users" className="nav-link">
+              <MdOutlinePeopleAlt className="nav-icon" /> Users
+            </NavLink>
+            <NavLink to="/reports" className="nav-link">
+              <HiOutlineDocumentReport className="nav-icon" /> Reports
+            </NavLink>
+            <NavLink to="/support" className="nav-link">
+              <IoMdText className="nav-icon" /> Support
+            </NavLink>
+            <NavLink to="/settings" className="nav-link">
+              <IoSettings className="nav-icon" /> Settings
+            </NavLink>
           </Nav>
         </nav>
       </div>
