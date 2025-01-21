@@ -36,7 +36,7 @@ const Dashboard = () => {
               draggable: true,
           }
         );
-          window.history.replaceState({}, document.title);
+          // window.history.replaceState({}, document.title);
       }
   }, [location.state]);
 

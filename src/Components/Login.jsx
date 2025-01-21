@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import Form from 'react-bootstrap/Form';
 import '../CSS/Login.css';
+import axiosInstance from './AxiosInstance';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const { login } = useContext(UserContext); // Use context login function
+  const {setToken,setUser} = useContext(UserContext); 
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -23,8 +24,28 @@ const Login = () => {
       setError(result.error);
     }
   };
+  const login = async (email, password) => {
+    try {
+      const response = await axiosInstance.post('/auth/login', { email, password });
+      const { access_token } = response.data; 
 
-  return (
+      localStorage.setItem('Token', access_token);
+      setToken(access_token);
+
+      const userResponse = await axiosInstance.get('/auth/profile', {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+      localStorage.setItem('User', JSON.stringify(userResponse.data)); 
+      setUser(userResponse.data);
+      console.log('Logged in user:', userResponse.data); 
+      return { success: true, user: userResponse.data };
+
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, error: error.response?.data?.message || 'Login failed' };
+    }
+  };
+    return (
     <div className="logincontainer">
       <h1 className="title text-center mb-4">Login Form</h1>
       <Form className="form" onSubmit={handleSubmit}>

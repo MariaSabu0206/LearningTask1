@@ -1,23 +1,14 @@
-import React, { useContext, useState } from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import {  Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
-import { UserContext } from "./UserContext";
 import ToastProvider from "./ToastProvider";
 
 const MainPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const { hasToken } = useContext(UserContext);
   const location = useLocation();
 
-  const hideHeaderPaths = ["/login", "/not-found"];
+  const hideHeaderPaths = ["/login"];
 
-//   if (hasToken() && location.pathname === "/login") {
-//     return <Navigate to="/dashboard" replace />;
-//   }
-
-  if (!hasToken() && location.pathname !== "/login") {
-    return <Navigate to="/login" replace />;
-  }
 
   return (
     <>

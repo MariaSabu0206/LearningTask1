@@ -11,7 +11,8 @@ import axiosInstance from './AxiosInstance';
 
 const UserCrud = () => {
   const { users, setUsers } = useContext(UserContext);
-  const [showModal, setShowModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [newUser, setNewUser] = useState({ name: '', email: '', password: '', avatar: '' });
   const [editingUser, setEditingUser] = useState(null);
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const UserCrud = () => {
             setUsers(response.data);
             localStorage.setItem('users', JSON.stringify(response.data));
           } else {
-            console.error('Invalid data format:');
+            console.error('Invalid data format:' );
           }
         })
         .catch((error) => {
@@ -47,14 +48,10 @@ const UserCrud = () => {
           toast.error('Error fetching users.', { position: 'top-right', autoClose: 3000 });
         });
     }
-  },[setUsers,currentPage] );
-
-  // useEffect(() => {
-  //   localStorage.setItem('currentPage', currentPage);
-  // }, [currentPage]);
+  }, [setUsers, currentPage]);
 
   const handleAddUser = () => {
-    setShowModal(true);
+    setShowAddModal(true);
     setEditingUser(null);
     setNewUser({ name: '', email: '', password: '', avatar: '' });
   };
@@ -66,17 +63,28 @@ const UserCrud = () => {
       email: user.email,
       avatar: user.avatar || '',
     });
-    setShowModal(true);
+    setShowEditModal(true);
   };
 
   const handleViewUser = (userId) => {
     navigate(`/user/${userId}`);
   };
 
-  const handleSaveUser = () => {
+  const checkEmailAvailability = async (email) => {
+    try {
+      const response = await axiosInstance.post('/users/is-available', { email });
+      return response.data.isAvailable;
+    } catch (error) {
+      console.error('Error checking email availability:', error);
+      toast.error('Error checking email availability.', { position: 'top-right', autoClose: 3000 });
+      return false; 
+    }
+  };
+
+  const handleSaveNewUser = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^[a-zA-Z0-9]{5,}$/;
-  
+
     const userName = newUser?.name?.trim() || '';
     const userEmail = newUser?.email?.trim() || '';
     const userPassword = newUser?.password?.trim() || '';
@@ -86,67 +94,81 @@ const UserCrud = () => {
       toast.error('All fields are required.', { position: 'top-right', autoClose: 3000 });
       return;
     }
-  
+
     if (!userName) {
       toast.error('Please enter a valid name.', { position: 'top-right', autoClose: 3000 });
       return;
     }
-  
+
     if (!emailRegex.test(userEmail)) {
       toast.error('Please enter a valid email address.', { position: 'top-right', autoClose: 3000 });
       return;
     }
-  
-    if (!editingUser && !passwordRegex.test(userPassword)) {
+
+    if (await checkEmailAvailability(userEmail)) {
+      toast.error('This email is already registered.', { position: 'top-right', autoClose: 3000 });
+      return;
+    }
+
+    if (!passwordRegex.test(userPassword)) {
       toast.error('Password must contain letters or numbers only and be at least 5 characters long.', { position: 'top-right', autoClose: 3000 });
       return;
     }
-  
-    if (!editingUser && !userAvatar) {
+
+    if (!userAvatar) {
       toast.error('Please enter an image URL for your profile.', { position: 'top-right', autoClose: 3000 });
       return;
     }
-  
-    if (editingUser) {
-      axiosInstance.put(`/users/${editingUser.id}`, {
-        name: userName,
-        email: userEmail,
-        avatar: userAvatar,
+
+    axiosInstance.post('/users/', {
+      name: userName,
+      email: userEmail,
+      password: userPassword,
+      avatar: userAvatar,
+    })
+      .then((response) => {
+        const updatedUsers = [response.data, ...users];
+        setUsers(updatedUsers);
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+        setCurrentPage(1);
+        localStorage.setItem('currentPage', '1');
+        toast.success('New user added successfully.', { position: 'top-right', autoClose: 3000 });
+        setShowAddModal(false);
       })
-        .then((response) => {
-          const updatedUsers = users.map((user) =>
-            user.id === editingUser.id ? response.data : user
-          );
-          setUsers(updatedUsers);
-          localStorage.setItem('users', JSON.stringify(updatedUsers));
-          toast.success('User details edited successfully.', { position: 'top-right', autoClose: 3000 });
-          setShowModal(false);
-        })
-        .catch((error) => {
-          console.error('Error editing user:', error);
-          toast.error('Error editing user.', { position: 'top-right', autoClose: 3000 });
-        });
-    } else {
-      axiosInstance.post('/users/', {
-        name: userName,
-        email: userEmail,
-        password: userPassword,
-        avatar: userAvatar,
-      })
-        .then((response) => {
-          const updatedUsers = [response.data, ...users];
-          setUsers(updatedUsers);
-          localStorage.setItem('users', JSON.stringify(updatedUsers));
-          setCurrentPage(1); 
-          localStorage.setItem('currentPage', '1'); 
-          toast.success('New user added successfully.', { position: 'top-right', autoClose: 3000 });
-          setShowModal(false);
-        })
-        .catch((error) => {
-          console.error('Error adding new user:', error);
-          toast.error('Error adding new user.', { position: 'top-right', autoClose: 3000 });
-        });
+      .catch((error) => {
+        console.error('Error adding new user:', error);
+        toast.error('Error adding new user.', { position: 'top-right', autoClose: 3000 });
+      });
+  };
+
+  const handleSaveEditUser = () => {
+    const userName = newUser?.name?.trim() || '';
+    const userEmail = newUser?.email?.trim() || '';
+    const userAvatar = newUser?.avatar?.trim() || '';
+
+    if (!userName && !userEmail && !userAvatar) {
+      toast.error('All fields are required.', { position: 'top-right', autoClose: 3000 });
+      return;
     }
+
+    axiosInstance.put(`/users/${editingUser.id}`, {
+      name: userName,
+      email: userEmail,
+      avatar: userAvatar,
+    })
+      .then((response) => {
+        const updatedUsers = users.map((user) =>
+          user.id === editingUser.id ? response.data : user
+        );
+        setUsers(updatedUsers);
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+        toast.success('User details edited successfully.', { position: 'top-right', autoClose: 3000 });
+        setShowEditModal(false);
+      })
+      .catch((error) => {
+        console.error('Error editing user:', error);
+        toast.error('Error editing user.', { position: 'top-right', autoClose: 3000 });
+      });
   };
 
   const handlePageChange = (pageNumber) => {
@@ -251,9 +273,10 @@ const UserCrud = () => {
         ))}
       </Pagination>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      {/* Add User Modal */}
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{editingUser ? 'Edit User' : 'Add User'}</Modal.Title>
+          <Modal.Title>Add User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -275,33 +298,72 @@ const UserCrud = () => {
                 onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
               />
             </Form.Group>
-            {!editingUser && (
-              <>
-                <Form.Group controlId="userPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Enter Password"
-                    value={newUser.password}
-                    onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="userImage">
-                  <Form.Label>Image</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Upload image"
-                    value={newUser.avatar}
-                    onChange={(e) => setNewUser({ ...newUser, avatar: e.target.value })}
-                  />
-                </Form.Group>
-              </>
-            )}
+            <Form.Group controlId="userPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter Password"
+                value={newUser.password}
+                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group controlId="userImage">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Upload image"
+                value={newUser.avatar}
+                onChange={(e) => setNewUser({ ...newUser, avatar: e.target.value })}
+              />
+            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <button className="adduserbtn" onClick={handleSaveUser}>
-            {editingUser ? 'Save Changes' : 'Add User'}
+          <button className="adduserbtn" onClick={handleSaveNewUser}>
+            Add User
+          </button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Edit User Modal */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="userName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter name"
+                value={newUser.name}
+                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group controlId="userEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={newUser.email}
+                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group controlId="userImage">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Upload image"
+                value={newUser.avatar}
+                onChange={(e) => setNewUser({ ...newUser, avatar: e.target.value })}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="adduserbtn" onClick={handleSaveEditUser}>
+            Save Changes
           </button>
         </Modal.Footer>
       </Modal>

@@ -16,7 +16,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
 const Header = ({ onSidebarToggle }) => {
-  const { user, logout , hasToken } = useContext(UserContext); // Get user and logout from UserContext
+  const { user, logout , hasToken } = useContext(UserContext); 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -29,7 +29,7 @@ const Header = ({ onSidebarToggle }) => {
   };
 
   const handleLogout = () => {
-    logout(); // Call the logout method from UserContext
+    logout();
     navigate('/login', { replace: true });
   };
 
@@ -41,9 +41,10 @@ const Header = ({ onSidebarToggle }) => {
     setShowConfirmModal(false);
   };
 
+  
+
   return (
     <div className="header-container">
-      {/* Logout Confirmation Modal */}
       <Modal show={showConfirmModal} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Logout</Modal.Title>
@@ -59,7 +60,6 @@ const Header = ({ onSidebarToggle }) => {
         </Modal.Footer>
       </Modal>
 
-      {/* Navbar */}
       <Navbar className="bg-body-tertiary navbar">
         <Form inline>
           <div className="brand d-flex">
@@ -128,10 +128,10 @@ const Header = ({ onSidebarToggle }) => {
             <NavLink to="/reports" className="nav-link">
               <HiOutlineDocumentReport className="nav-icon" /> Reports
             </NavLink>
-            <NavLink to="/support" className="nav-link">
+            <NavLink to="" className="nav-link">
               <IoMdText className="nav-icon" /> Support
             </NavLink>
-            <NavLink to="/settings" className="nav-link">
+            <NavLink to="" className="nav-link">
               <IoSettings className="nav-icon" /> Settings
             </NavLink>
           </Nav>
