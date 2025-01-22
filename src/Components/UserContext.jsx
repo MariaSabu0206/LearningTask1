@@ -26,7 +26,6 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Redirect logic for token validation
     if (hasToken()) {
       if (location.pathname === '/login') {
         navigate('/dashboard');
@@ -37,7 +36,6 @@ export const UserProvider = ({ children }) => {
       }
     }
 
-    // Fetch users if token is available
     const fetchUsers = async () => {
       if (!hasToken()) return;
       try {
@@ -53,11 +51,6 @@ export const UserProvider = ({ children }) => {
     fetchUsers();
   }, [hasToken, location.pathname, token, navigate]);
 
-  // useEffect(() => {
-  //   if (location.pathname === '/not-found') {
-  //     navigate('/not-found', { replace: true });
-  //   }
-  // }, [location.pathname, navigate]);
 
   return (
     <UserContext.Provider

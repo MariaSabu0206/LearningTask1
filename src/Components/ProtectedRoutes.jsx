@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import UserCrud from './UserCrud';
@@ -10,7 +10,6 @@ import NotFound from './NotFound';
 import MainPage from './MainPage';
 
 const ProtectedRoutes = () => {
-  
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -21,10 +20,10 @@ const ProtectedRoutes = () => {
         <Route path="reports" element={<Reports />} />
         <Route path="growth" element={<Growth />} />
       </Route>
-      <Route path="/not-found" element={<NotFound  />} />
-      <Route path="*" element={<Navigate to="/not-found" />} />
+      <Route path="/not-found" element={<NotFound />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
 
-export default ProtectedRoutes;  
+export default ProtectedRoutes;

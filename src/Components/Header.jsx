@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import '../CSS/Header.css';
 import { Navbar, Form, Nav, Modal } from 'react-bootstrap';
 import { LiaRProject } from "react-icons/lia";
@@ -16,10 +16,11 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
 const Header = ({ onSidebarToggle }) => {
-  const { user, logout , hasToken } = useContext(UserContext); 
+  const { user, logout, hasToken } = useContext(UserContext); 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const dropdownRef = useRef(null); 
   const navigate = useNavigate();
 
   const toggleSidebar = () => {
@@ -34,14 +35,28 @@ const Header = ({ onSidebarToggle }) => {
   };
 
   const toggleProfileDropdown = () => {
-    setShowProfileDropdown(!showProfileDropdown);
+    setShowProfileDropdown((prev) => !prev);
   };
 
   const closeModal = () => {
     setShowConfirmModal(false);
   };
 
-  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    };
+
+    if (showProfileDropdown) {
+      document.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showProfileDropdown]);
 
   return (
     <div className="header-container">
@@ -70,18 +85,15 @@ const Header = ({ onSidebarToggle }) => {
           </div>
         </Form>
         <div className="d-flex ms-auto">
-          {/* Search */}
           <div className="search d-flex">
             <Form.Control type="text" placeholder="Search" />
             <FaSearch className="search-icon" />
           </div>
-          {/* Notifications */}
           <div>
             <IoNotifications className="notify" />
           </div>
-          {/* Profile Dropdown */}
           {hasToken && (
-            <div className="profile-dropdown-container">
+            <div className="profile-dropdown-container" ref={dropdownRef}>
               <div
                 className="profile-img"
                 onClick={toggleProfileDropdown}
@@ -106,7 +118,6 @@ const Header = ({ onSidebarToggle }) => {
         </div>
       </Navbar>
 
-      {/* Sidebar */}
       <div className={`sidebar ${showSidebar ? 'show' : ''}`}>
         <div className="brand d-flex">
           <LiaRProject className="brandicon" />
