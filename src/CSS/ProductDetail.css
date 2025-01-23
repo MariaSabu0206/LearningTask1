@@ -1,0 +1,39 @@
+.product-detail-container {
+    padding: 20px;
+  }
+  
+  .product-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .product-info {
+    display: flex;
+    margin-top: 20px;
+  }
+  
+  .product-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .product-details p {
+    margin: 5px 0;
+  }
+  
+  .back-btn {
+    background-color: #113b6c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .back-btn:hover {
+    background-color: #0c1f34;
+  }

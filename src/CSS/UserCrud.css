@@ -99,6 +99,15 @@
     background-color: #15365a;
     border-color: #102944;
     color: white;
+    margin-left: 574px;
+  }
+  .gridicon{
+    color: blue;
+    font-size: x-large;
+    cursor: pointer;
+    padding: 1px;
+    margin-top: 7px;
+    margin-right: 27px;
   }
 
   .cancel{

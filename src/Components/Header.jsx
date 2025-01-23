@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import '../CSS/Header.css';
-import { Navbar, Form, Nav, Modal } from 'react-bootstrap';
+import { Navbar, Form, Nav, Modal, Container, Row, Col } from 'react-bootstrap';
 import { LiaRProject } from "react-icons/lia";
 import { FaSearch } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
@@ -76,46 +76,50 @@ const Header = ({ onSidebarToggle }) => {
       </Modal>
 
       <Navbar className="bg-body-tertiary navbar">
-        <Form inline>
-          <div className="brand d-flex">
-            <LiaRProject className="brandicon" />
-            <h3 className="brandname">
-              Profitize <GiHamburgerMenu className="hamburger" onClick={toggleSidebar} />
-            </h3>
-          </div>
-        </Form>
-        <div className="d-flex ms-auto">
-          <div className="search d-flex">
-            <Form.Control type="text" placeholder="Search" />
-            <FaSearch className="search-icon" />
-          </div>
-          <div>
-            <IoNotifications className="notify" />
-          </div>
-          {hasToken && (
-            <div className="profile-dropdown-container" ref={dropdownRef}>
-              <div
-                className="profile-img"
-                onClick={toggleProfileDropdown}
-                style={{ cursor: 'pointer' }}
-              >
-                <FaUserCircle size={30} />
+        <Container fluid>
+          <Row className="w-100">
+            <Col xs={6} sm={8} md={8} lg={10} xl={10}>
+              <div className="brand d-flex">
+                <LiaRProject className="brandicon" />
+                <h3 className="brandname">
+                  Profitize <GiHamburgerMenu className="hamburger" onClick={toggleSidebar} />
+                </h3>
               </div>
-
-              {showProfileDropdown && (
-                <div className="profile-dropdown">
-                  <div className="profile-dropdown-item item1">{user?.email}</div>
+            </Col>
+            <Col xs={6} sm={4} md={4} lg={2} xl={2} className="d-flex justify-content-end">
+              <div className="search d-flex">
+                <Form.Control type="text" placeholder="Search" className='search-control' />
+                <FaSearch className="search-icon" />
+              </div>
+              <div>
+                <IoNotifications className="notify" />
+              </div>
+              {hasToken && (
+                <div className="profile-dropdown-container" ref={dropdownRef}>
                   <div
-                    className="profile-dropdown-item item2"
-                    onClick={() => setShowConfirmModal(true)}
+                    className="profile-img"
+                    onClick={toggleProfileDropdown}
+                    style={{ cursor: 'pointer' }}
                   >
-                    Logout
+                    <FaUserCircle size={30} />
                   </div>
+
+                  {showProfileDropdown && (
+                    <div className="profile-dropdown">
+                      <div className="profile-dropdown-item item1">{user?.email}</div>
+                      <div
+                        className="profile-dropdown-item item2"
+                        onClick={() => setShowConfirmModal(true)}
+                      >
+                        Logout
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-          )}
-        </div>
+            </Col>
+          </Row>
+        </Container>
       </Navbar>
 
       <div className={`sidebar ${showSidebar ? 'show' : ''}`}>
@@ -139,8 +143,8 @@ const Header = ({ onSidebarToggle }) => {
             <NavLink to="/reports" className="nav-link">
               <HiOutlineDocumentReport className="nav-icon" /> Reports
             </NavLink>
-            <NavLink to="" className="nav-link">
-              <IoMdText className="nav-icon" /> Support
+            <NavLink to="/products" className="nav-link">
+              <IoMdText className="nav-icon" /> Products
             </NavLink>
             <NavLink to="" className="nav-link">
               <IoSettings className="nav-icon" /> Settings

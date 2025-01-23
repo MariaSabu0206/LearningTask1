@@ -121,7 +121,7 @@
     position: relative;
     display: flex;
     align-items: center;
-  }
+}
   
   .profile-img {
     border-radius: 50%;
@@ -247,7 +247,10 @@ ul li a {
     }
     
   }
-  
+  .search-control{
+    width: 190px !important;
+  }
+
   @media (max-width: 575.98px) {
     .logoutname{
         display: none;
