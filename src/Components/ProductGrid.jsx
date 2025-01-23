@@ -15,6 +15,33 @@ const ProductGrid = () => {
    const [newItem, setNewItem] = useState({title: '', price: '', description: '',categoryId:'', images: [''] });
 
   const navigate = useNavigate();
+
+
+
+  const [showEditModal, setShowEditModal] = useState(false);
+const [editableProduct, setEditableProduct] = useState({
+  id: '',
+  title: '',
+  price: '',
+  description: '',
+  categoryId: '',
+  images: ['']
+});
+
+const openEditModal = (product) => {
+  setEditableProduct({ ...product });
+  setShowEditModal(true);
+};
+
+const handleEditSave = () => {
+  handleEdit(editableProduct);
+  setShowEditModal(false); // Close the modal after saving changes
+};
+
+
+
+
+
   useEffect(() => {
     axiosInstance
       .get('/products')
@@ -28,10 +55,46 @@ const ProductGrid = () => {
       });
   }, []);
 
-  const handleEdit = (product) => {
-   
+ 
+  const handleAdd = () => {
+    axiosInstance
+      .post('/products', newItem) // Use the newItem state as the body for the request
+      .then((response) => {
+        // Update the products list with the newly added product
+        setProducts((prevProducts) => [...prevProducts, response.data]);
+        toast.success('Product added successfully!');
+        setShowAddModal(false); // Close the modal
+        setNewItem({ title: '', price: '', description: '', categoryId: '', images: [''] }); // Reset form
+      })
+      .catch((error) => {
+        console.error('Error adding product:', error);
+        toast.error('Failed to add product');
+      });
   };
-
+  
+  const handleEdit = (product) => {
+    const updatedProduct = { 
+      title: 'Change title', // You can update specific fields as per requirement
+      price: 100 
+    };
+  
+    axiosInstance
+      .put(`/products/${product.id}`, updatedProduct) // Update product using its ID
+      .then((response) => {
+        // Update the product in the products list
+        setProducts((prevProducts) =>
+          prevProducts.map((item) =>
+            item.id === product.id ? response.data : item
+          )
+        );
+        toast.success('Product updated successfully!');
+      })
+      .catch((error) => {
+        console.error('Error updating product:', error);
+        toast.error('Failed to update product');
+      });
+  };
+  
   const handleDelete = (productId) => {
     axiosInstance
       .delete(`/products/${productId}`)
@@ -113,13 +176,97 @@ const ProductGrid = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <button className="adduserbtn"  >
+          <button className="adduserbtn"  
+          onClick={handleAdd}
+          >
             Add Product
           </button>
         </Modal.Footer>
       </Modal>
 
 
+     
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+  <Modal.Header closeButton>
+    <Modal.Title>Edit Product</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form>
+      <Form.Group controlId="editProductTitle">
+        <Form.Label>Title</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter title"
+          value={editableProduct.title}
+          onChange={(e) =>
+            setEditableProduct({ ...editableProduct, title: e.target.value })
+          }
+        />
+      </Form.Group>
+      <Form.Group controlId="editProductPrice">
+        <Form.Label>Price</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder="Enter price"
+          value={editableProduct.price}
+          onChange={(e) =>
+            setEditableProduct({ ...editableProduct, price: e.target.value })
+          }
+        />
+      </Form.Group>
+      <Form.Group controlId="editProductDescription">
+        <Form.Label>Description</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter description"
+          value={editableProduct.description}
+          onChange={(e) =>
+            setEditableProduct({
+              ...editableProduct,
+              description: e.target.value
+            })
+          }
+        />
+      </Form.Group>
+      <Form.Group controlId="editProductCategoryId">
+        <Form.Label>Category ID</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder="Enter Category ID"
+          value={editableProduct.categoryId}
+          onChange={(e) =>
+            setEditableProduct({
+              ...editableProduct,
+              categoryId: e.target.value
+            })
+          }
+        />
+      </Form.Group>
+      <Form.Group controlId="editProductImages">
+        <Form.Label>Image URL</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter image URL"
+          value={editableProduct.images[0]}
+          onChange={(e) =>
+            setEditableProduct({
+              ...editableProduct,
+              images: [e.target.value]
+            })
+          }
+        />
+      </Form.Group>
+    </Form>
+  </Modal.Body>
+  <Modal.Footer>
+    <button
+      className="adduserbtn"
+      onClick={handleEditSave} // Save changes and close the modal
+    >
+      Save Changes
+    </button>
+  </Modal.Footer>
+</Modal>
 
 
 
@@ -162,7 +309,7 @@ const ProductGrid = () => {
                 <div className="d-flex justify-content-between cardicons">
                   <FaEdit
                     className="action-icon"
-                    onClick={() => handleEdit(product)}
+                    onClick={() => openEditModal(product)}
                   />
                   <FaTrash
                     className="action-icon"
